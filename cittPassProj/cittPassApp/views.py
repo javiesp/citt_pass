@@ -2,7 +2,8 @@ from django.shortcuts import render
 from pymongo import MongoClient
 
 # Create your views here.
-
+def main(request):
+    return render(request, 'main.html')
 
 #Conexión bd mongodb atlas
 client = MongoClient('mongodb+srv://javiesp:ja123456@cluster0.yuojwoc.mongodb.net/')
