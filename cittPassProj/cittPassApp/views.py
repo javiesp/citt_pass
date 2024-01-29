@@ -3,23 +3,25 @@ from pymongo import MongoClient
 
 # Create your views here.
 def main(request):
-    # Conexión a la base de datos de MongoDB
-    client = MongoClient('mongodb+srv://javiesp:ja123456@cluster0.yuojwoc.mongodb.net/')
-    db = client['cittpass']
-    coleccionUsuario = db["UsuariosCitt"]
-
     # Obtener documentos de la colección
-    documentos = coleccionUsuario.find()
-
+    documentos = conectar_bd().find()
     # Pasar los documentos al contexto de la plantilla
     context = {'documentos': documentos}
 
     # Renderizar la plantilla con el contexto
     return render(request, 'main.html', context)
 
-#Conexión bd mongodb atlas
-client = MongoClient('mongodb+srv://javiesp:ja123456@cluster0.yuojwoc.mongodb.net/')
-db = client['cittpass']
+def agregar_usuario():
+    return 0 
+
+# Conectar a la base de datos mongo 
+def conectar_bd():
+    client = MongoClient('mongodb+srv://javiesp:Ja22041982@cluster0.yuojwoc.mongodb.net/')
+    db = client['cittpass']
+    coleccionUsuario = db["UsuariosCitt"]
+
+    return coleccionUsuario
+
 
 coleccionUsuario = db["UsuariosCitt"]
 
