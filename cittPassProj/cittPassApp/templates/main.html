@@ -62,6 +62,9 @@
                                     <thead>
                                         <tr>
                                             <th>Fecha de Ingreso</th>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Semestre</th>
                                             <th>UID</th>
                                             <th>Comentario</th>
                                         </tr>
@@ -71,6 +74,9 @@
                                             <tr>
                                                 <!-- Mostrar los datos del documento en la tabla -->
                                                 <td>{{ documento.fecha_ingreso }}</td>
+                                                <td>{{ documento.nombre }}</td>
+                                                <td>{{ documento.apellido }}</td>
+                                                <td>{{ documento.semestre }}</td>
                                                 <td>{{ documento.UID }}</td>
                                                 <td>{{ documento.comentario }}</td>
                                             </tr>
@@ -80,13 +86,35 @@
                             </div>
                         </div>
                     </div>
-                <div class="col-md-4 mt-3">
-                    <div class="card">
-                        <div class="card-body">
-                            Cuadro 2
+                    <div class="col-md-4 mt-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3>Agregar un nuevo usuario</h3>
+                                <form method="post" action="{% url 'add_user' %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="fecha_ingreso" class="form-label">Fecha ingreso</label>
+                                        <input class="form-control" type="date" name="fecha_ingreso" value="{{ fecha_de_hoy }}" min="2024-01-01"/>
+                                    </div>
+                                    <div class="mb-3 d-flex">
+                                        <label for="nombre" class="form-label">Nombre: </label>
+                                        <input class="form-control w-1" name="nombre" id="nombre" aria-describedby="nombre">
+                                        <label for="apellido" class="form-label">Apellido: </label>
+                                        <input class="form-control w-1" name="apellido" id="apellido" aria-describedby="apellido">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="semestre" class="form-label">Semestre</label>
+                                        <input class="form-control w-1" type="number" name="semestre" id="semestre" aria-describedby="semestre" max="8">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="UID" class="form-label">UID</label>
+                                        <input class="form-control" name="UID" id="UID" aria-describedby="UID">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </div>                    
                 <div class="col-md-4 mt-3">
                     <div class="card">
                         <div class="card-body">
