@@ -64,7 +64,7 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Fecha de Ingreso</th>
+                                                <th>Fecha de registro</th>
                                                 <th>Nombre</th>
                                                 <th>Apellido</th>
                                                 <th>Semestre</th>
@@ -76,7 +76,7 @@
                                             {% for documento in documentos %}
                                                 <tr>
                                                     <!-- Mostrar los datos del documento en la tabla -->
-                                                    <td>{{ documento.fecha_ingreso }}</td>
+                                                    <td>{{ documento.fecha_registro }}</td>
                                                     <td>{{ documento.nombre }}</td>
                                                     <td>{{ documento.apellido }}</td>
                                                     <td>{{ documento.semestre }}</td>
@@ -97,8 +97,8 @@
                                     <form method="post" action="{% url 'add_user' %}">
                                         {% csrf_token %}
                                         <div class="mb-3">
-                                            <label for="fecha_ingreso" class="form-label">Fecha ingreso</label>
-                                            <input class="form-control" type="date" name="fecha_ingreso" value="{{ fecha_de_hoy }}" min="2024-01-01"/>
+                                            <label for="fecha_registro" class="form-label">Fecha Registro</label>
+                                            <input class="form-control" type="date" name="fecha_registro" value="{{ fecha_de_hoy }}" min="2024-01-01"/>
                                         </div>
                                         <div class="mb-3 d-flex">
                                             <label for="nombre" class="form-label">Nombre: </label>

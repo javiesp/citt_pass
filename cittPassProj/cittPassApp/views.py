@@ -16,7 +16,7 @@ def main(request):
     coleccionUsuario = db["UsuariosCitt"]
 
     # Obtener documentos de la colección
-    documentos = coleccionUsuario.find().sort("fecha_ingreso", pymongo.DESCENDING).limit(5)
+    documentos = coleccionUsuario.find().sort("fecha_registro", pymongo.DESCENDING).limit(5)
 
     # Pasar los documentos al contexto de la plantilla
     context = {'documentos': documentos}
@@ -43,7 +43,7 @@ def verificar_uid_existente(request):
 
 def add_user(request):
     if request.method == 'POST':
-        fecha_ingreso = request.POST.get('fecha_ingreso')
+        fecha_registro = request.POST.get('fecha_registro')
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
         semestre = request.POST.get('semestre')
@@ -58,7 +58,7 @@ def add_user(request):
 
         # Insert the new user into MongoDB
         new_user = {
-            "fecha_ingreso": fecha_ingreso,
+            "fecha_ingreso": fecha_registro,
             "nombre": nombre,
             "apellido": apellido,
             "semestre": semestre,
