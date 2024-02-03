@@ -24,6 +24,24 @@ def main(request):
     # Renderizar la plantilla con el contexto
     return render(request, 'main.html', context)
 
+def add_nuevo_ingreso(uid, nombre, apellido):
+    client = MongoClient('mongodb+srv://javiesp:Ja22041982@cluster0.yuojwoc.mongodb.net/')
+    db = client['cittpass']
+    coleccionUsuario = db["ingresoUsuario"]
+
+
+    # si existe agregar a bd nuevo ingreso
+    ingresoUsuario = {
+            "fecha_ingreso" : fecha_de_hoy,
+            "UID" : uid,
+            "Alumno: " : nombre + apellido,
+            "comentario" : "Hola Mundo"
+        }
+
+    coleccionUsuario.insert_one(ingresoUsuario)
+
+    return 'agregado'
+
 def verificar_uid_existente(request):
     uid = request.GET.get('uid', None)
 
@@ -34,11 +52,17 @@ def verificar_uid_existente(request):
         coleccionUsuario = db["UsuariosCitt"]
 
         # Verificar si el UID existe en la base de datos
-        existe = coleccionUsuario.find_one({'UID': uid}) is not None
+        user = coleccionUsuario.find_one({'UID': uid}, {'nombre': 1, 'apellido': 1})
 
-        return JsonResponse({'existe': existe})
+        # si existe agregar a bd nuevo ingreso
+        if user:
+            add_nuevo_ingreso(uid, user.get('nombre'), user.get('apellido'))
+            print('hola')
+
+        return JsonResponse({'existe': user is not None})
     else:
         return JsonResponse({'existe': False})
+
     
 
 def add_user(request):
