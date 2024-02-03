@@ -22,4 +22,5 @@ urlpatterns = [
     path('main/', views.main, name='main'),
     path('', views.main, name='index'),
     path('add_user/', views.add_user, name='add_user'),
+    path('verificar_uid_existente/', views.verificar_uid_existente, name='verificar_uid_existente'),
 ]

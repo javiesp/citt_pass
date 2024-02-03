@@ -1,131 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Citt pass - dashboard</title>
+        <!-- vuejs -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body class="h-100">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#"><b>CITT PASS - Ingresos</b></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            <ul><li>usuario: Admin</li></ul>
-        </button>
-    </div>
-</nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><b>CITT PASS - Ingresos</b></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                <ul><li>usuario: Admin</li></ul>
+            </button>
+        </div>
+    </nav>
 
-<!-- Contenido principal -->
-<div class="container-fluid vh-100">
-    <div class="row h-100">
-        <!-- Barra lateral -->
-        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <hr class="rounded">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            Generar documento .cvs
-                        </a>
-                    </li>
-                    <hr class="rounded">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            CRUD
-                        </a>
-                    </li>
-                    <hr class="rounded">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            DASHBOARD
-                        </a>
-                    </li>
-                    <!-- Agregar más opciones según sea necesario -->
-                </ul>
-            </div>
-        </nav>
+    <!-- Contenido principal -->
+    <div class="container-fluid vh-100">
+        <div class="row h-100">
+            <!-- Barra lateral -->
+            <nav 
+                id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <hr class="rounded">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                Generar documento .cvs
+                            </a>
+                        </li>
+                        <hr class="rounded">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                CRUD
+                            </a>
+                        </li>
+                        <hr class="rounded">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                DASHBOARD
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-        <!-- Contenido principal -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 p-3 px-md-4">
-            <!-- Cuadrícula de Bootstrap -->
-            <div class="row mt-1">
-                <!-- lista usuarios desde mongo -->
-                <div class="col-md-12">
-                        <div class="card">
-                        <h5 class="p-1">Últimos ingresos:</h5>
-                            <div class="card-body">
+            <!-- Contenido principal -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 p-3 px-md-4">
+                <!-- Cuadrícula de Bootstrap -->
+                <div class="row mt-1">
+                    <!-- lista usuarios desde mongo -->
+                    <div class="col-md-12">
+                            <div class="card">
+                            <h5 class="p-1">Últimos ingresos:</h5>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha de Ingreso</th>
+                                                <th>Nombre</th>
+                                                <th>Apellido</th>
+                                                <th>Semestre</th>
+                                                <th>UID</th>
+                                                <th>Comentario</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for documento in documentos %}
+                                                <tr>
+                                                    <!-- Mostrar los datos del documento en la tabla -->
+                                                    <td>{{ documento.fecha_ingreso }}</td>
+                                                    <td>{{ documento.nombre }}</td>
+                                                    <td>{{ documento.apellido }}</td>
+                                                    <td>{{ documento.semestre }}</td>
+                                                    <td>{{ documento.UID }}</td>
+                                                    <td>{{ documento.comentario }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Agregar Usuario -->
+                        <div class="col-md-4 mt-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3>Agregar un nuevo usuario</h3>
+                                    <form method="post" action="{% url 'add_user' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="fecha_ingreso" class="form-label">Fecha ingreso</label>
+                                            <input class="form-control" type="date" name="fecha_ingreso" value="{{ fecha_de_hoy }}" min="2024-01-01"/>
+                                        </div>
+                                        <div class="mb-3 d-flex">
+                                            <label for="nombre" class="form-label">Nombre: </label>
+                                            <input class="form-control w-1" name="nombre" id="nombre" aria-describedby="nombre">
+                                            <label for="apellido" class="form-label">Apellido: </label>
+                                            <input class="form-control w-1" name="apellido" id="apellido" aria-describedby="apellido">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="semestre" class="form-label">Semestre</label>
+                                            <input class="form-control w-1" type="number" name="semestre" id="semestre" aria-describedby="semestre" max="8">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="UID" class="form-label">UID</label>
+                                            <select class="form-select" name="UID" id="UID"></select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="comentario" class="form-label">Comentario</label>
+                                            <textarea class="form-control" name="comentario" id="comentario"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="rol" class="form-label">Rol</label>
+                                            <input class="form-control" name="rol" id="rol" aria-describedby="rol">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>               
+                        <div class="col-md-4 mt-3">
+                            <div class="card p-1" id="app2">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Fecha de Ingreso</th>
-                                            <th>Nombre</th>
-                                            <th>Apellido</th>
-                                            <th>Semestre</th>
-                                            <th>UID</th>
-                                            <th>Comentario</th>
+                                            <th>Nuevos UID detectados:</th>
+
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {% for documento in documentos %}
-                                            <tr>
-                                                <!-- Mostrar los datos del documento en la tabla -->
-                                                <td>{{ documento.fecha_ingreso }}</td>
-                                                <td>{{ documento.nombre }}</td>
-                                                <td>{{ documento.apellido }}</td>
-                                                <td>{{ documento.semestre }}</td>
-                                                <td>{{ documento.UID }}</td>
-                                                <td>{{ documento.comentario }}</td>
-                                            </tr>
-                                        {% endfor %}
+                                    <tbody id="listUID"> <!-- Asegúrate de tener este tbody con el id "listUID" -->
                                     </tbody>
                                 </table>
+                                <div class="mb-3">
+                                    <h6>*provisional, hasta que se implemente arduino</h6>
+                                    <label for="nuevoUID" class="form-label">Nuevo UID</label>
+                                    <input class="form-control" name="nuevoUID" id="nuevoUID" aria-describedby="nuevoUID">
+                                </div>
+                                <button class="btn btn-primary" onclick="agregarNuevoUid()">Agregar Nuevo UID</button>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mt-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h3>Agregar un nuevo usuario</h3>
-                                <form method="post" action="{% url 'add_user' %}">
-                                    {% csrf_token %}
-                                    <div class="mb-3">
-                                        <label for="fecha_ingreso" class="form-label">Fecha ingreso</label>
-                                        <input class="form-control" type="date" name="fecha_ingreso" value="{{ fecha_de_hoy }}" min="2024-01-01"/>
-                                    </div>
-                                    <div class="mb-3 d-flex">
-                                        <label for="nombre" class="form-label">Nombre: </label>
-                                        <input class="form-control w-1" name="nombre" id="nombre" aria-describedby="nombre">
-                                        <label for="apellido" class="form-label">Apellido: </label>
-                                        <input class="form-control w-1" name="apellido" id="apellido" aria-describedby="apellido">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="semestre" class="form-label">Semestre</label>
-                                        <input class="form-control w-1" type="number" name="semestre" id="semestre" aria-describedby="semestre" max="8">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="UID" class="form-label">UID</label>
-                                        <input class="form-control" name="UID" id="UID" aria-describedby="UID">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Agregar Usuario</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>                    
-                <div class="col-md-4 mt-3">
-                    <div class="card">
-                        <div class="card-body">
-                            Cuadro 3
-                        </div>
-                    </div>
+                        </div>                        
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
-</div>
+<script src="{% static 'js/app.js' %}"></script>
+
+<script>
+    // Arreglo inicial de UID
+    let nuevosUidDesdeArduino = [
+
+    ];
+
+    function nuevosUidIngresados() {
+        let dropdown = document.getElementById("UID");
+        let tableBody = document.getElementById("listUID");
+
+        for (let i = 0; i < nuevosUidDesdeArduino.length; i++) {
+            let option = document.createElement("option");
+            option.value = nuevosUidDesdeArduino[i].UID;
+            option.text = nuevosUidDesdeArduino[i].UID;
+            dropdown.add(option);
+
+            let newRow = tableBody.insertRow(-1);
+            let cell = newRow.insertCell(0);
+            cell.innerHTML = nuevosUidDesdeArduino[i].UID;
+        }
+
+        console.log(nuevosUidDesdeArduino);
+    }
+
+    function agregarNuevoUid() {
+        let nuevoUid = document.getElementById("nuevoUID").value.trim();
+        if (nuevoUid !== "") {
+            // Verificar si el UID ya existe haciendo una solicitud al servidor
+            verificarExistenciaUid(nuevoUid);
+        } else {
+            alert("Por favor, ingrese un UID válido.");
+        }
+    }
+
+    function verificarExistenciaUid(uid) {
+        // Realizar una solicitud AJAX a la nueva vista en Django
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Respuesta exitosa
+                    const respuesta = JSON.parse(xhr.responseText);
+                    if (respuesta.existe) {
+                        alert("El UID ya existe en la base de datos.");
+                    } else {
+                        // Si no existe, agregarlo al array
+                        nuevosUidDesdeArduino.push({ UID: uid });
+
+                        // Limpiar el campo de entrada
+                        document.getElementById("nuevoUID").value = "";
+
+                        // Llamar a la función para actualizar dropdown y tabla
+                        actualizarDropdownYTabla();
+                    }
+                } else {
+                    alert("Error al verificar la existencia del UID.");
+                }
+            }
+        };
+
+        xhr.open("GET", `/verificar_uid_existente/?uid=${uid}`, true);
+        xhr.send();
+    }
+
+
+    function actualizarDropdownYTabla() {
+        let dropdown = document.getElementById("UID");
+        let tableBody = document.getElementById("listUID");
+
+        // Limpiar dropdown y tabla antes de actualizar
+        dropdown.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        // Llamar a la función principal para agregar UID
+        nuevosUidIngresados();
+    }
+
+    // Asegúrate de que esta línea llame a la función después de que la página se haya cargado
+    window.onload = function () {
+    try {
+        nuevosUidIngresados();
+    } catch (error) {
+        console.error("Error al cargar la página:", error);
+    }
+};
+</script>
 
 </body>
 </html>

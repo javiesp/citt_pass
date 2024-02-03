@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.http import JsonResponse
 import pymongo
 from pymongo import MongoClient
 from datetime import datetime
@@ -23,12 +24,31 @@ def main(request):
     # Renderizar la plantilla con el contexto
     return render(request, 'main.html', context)
 
+def verificar_uid_existente(request):
+    uid = request.GET.get('uid', None)
+
+    if uid:
+        # Conexión a la base de datos de MongoDB
+        client = MongoClient('mongodb+srv://javiesp:Ja22041982@cluster0.yuojwoc.mongodb.net/')
+        db = client['cittpass']
+        coleccionUsuario = db["UsuariosCitt"]
+
+        # Verificar si el UID existe en la base de datos
+        existe = coleccionUsuario.find_one({'UID': uid}) is not None
+
+        return JsonResponse({'existe': existe})
+    else:
+        return JsonResponse({'existe': False})
+    
+
 def add_user(request):
     if request.method == 'POST':
         fecha_ingreso = request.POST.get('fecha_ingreso')
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
         semestre = request.POST.get('semestre')
+        comentario = request.POST.get('comentario')
+        rol = request.POST.get('rol')
         UID = request.POST.get('UID')
 
         # Connect to MongoDB
@@ -42,7 +62,9 @@ def add_user(request):
             "nombre": nombre,
             "apellido": apellido,
             "semestre": semestre,
-            "UID": UID
+            "UID": UID,
+            "comentario": comentario,
+            "rol": rol
         }
         coleccionUsuario.insert_one(new_user)
 
