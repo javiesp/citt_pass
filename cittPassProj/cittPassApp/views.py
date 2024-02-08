@@ -13,10 +13,13 @@ def main(request):
     # Conexión a la base de datos de MongoDB
     client = MongoClient('mongodb+srv://javiesp:Ja22041982@cluster0.yuojwoc.mongodb.net/')
     db = client['cittpass']
-    coleccionUsuario = db["UsuariosCitt"]
+    coleccionUsuario = db["ingresoUsuario"]
 
     # Obtener documentos de la colección
-    documentos = coleccionUsuario.find().sort("fecha_registro", pymongo.DESCENDING).limit(5)
+    documentos = coleccionUsuario.find().sort("fecha_ingreso", pymongo.DESCENDING).limit(5)
+
+    print(documentos)
+    ##cant_ingresos = dict(zip(documentos,map(lambda x:documentos.count(x), documentos)))
 
     # Pasar los documentos al contexto de la plantilla
     context = {'documentos': documentos}
@@ -34,7 +37,7 @@ def add_nuevo_ingreso(uid, nombre, apellido):
     ingresoUsuario = {
             "fecha_ingreso" : fecha_de_hoy,
             "UID" : uid,
-            "Alumno: " : nombre + apellido,
+            "alumno: " : nombre + ' ' + apellido,
             "comentario" : "Hola Mundo"
         }
 
